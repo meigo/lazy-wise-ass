@@ -1,0 +1,195 @@
+
+wise-ass.png
+size: 928,772
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+arm-L-1
+  rotate: false
+  xy: 703, 574
+  size: 134, 196
+  orig: 134, 196
+  offset: 0, 0
+  index: -1
+arm-L-2
+  rotate: false
+  xy: 764, 404
+  size: 113, 169
+  orig: 113, 169
+  offset: 0, 0
+  index: -1
+arm-L-3
+  rotate: false
+  xy: 679, 218
+  size: 108, 167
+  orig: 108, 167
+  offset: 0, 0
+  index: -1
+arm-R
+  rotate: false
+  xy: 561, 162
+  size: 117, 192
+  orig: 117, 192
+  offset: 0, 0
+  index: -1
+beard
+  rotate: false
+  xy: 347, 25
+  size: 104, 278
+  orig: 104, 278
+  offset: 0, 0
+  index: -1
+body
+  rotate: false
+  xy: 143, 304
+  size: 248, 291
+  orig: 248, 291
+  offset: 0, 0
+  index: -1
+eyes-closed
+  rotate: false
+  xy: 143, 3
+  size: 42, 23
+  orig: 42, 23
+  offset: 0, 0
+  index: -1
+eyes-open
+  rotate: false
+  xy: 421, 330
+  size: 30, 24
+  orig: 30, 24
+  offset: 0, 0
+  index: -1
+face
+  rotate: false
+  xy: 654, 386
+  size: 109, 187
+  orig: 109, 187
+  offset: 0, 0
+  index: -1
+flies
+  rotate: false
+  xy: 838, 574
+  size: 16, 12
+  orig: 66, 55
+  offset: 50, 0
+  index: -1
+hair-B
+  rotate: false
+  xy: 143, 27
+  size: 203, 276
+  orig: 203, 292
+  offset: 0, 16
+  index: -1
+hair-F-L
+  rotate: false
+  xy: 452, 94
+  size: 108, 260
+  orig: 108, 260
+  offset: 0, 0
+  index: -1
+hair-F-R
+  rotate: false
+  xy: 679, 106
+  size: 113, 111
+  orig: 113, 111
+  offset: 0, 0
+  index: -1
+hand-L-1
+  rotate: false
+  xy: 452, 13
+  size: 48, 80
+  orig: 48, 80
+  offset: 0, 0
+  index: -1
+hand-L-2
+  rotate: false
+  xy: 561, 51
+  size: 116, 110
+  orig: 116, 110
+  offset: 0, 0
+  index: -1
+hand-L-2-2
+  rotate: false
+  xy: 788, 238
+  size: 69, 165
+  orig: 69, 165
+  offset: 0, 0
+  index: -1
+hand-L-2-3
+  rotate: false
+  xy: 793, 110
+  size: 69, 127
+  orig: 69, 160
+  offset: 0, 0
+  index: -1
+hand-L-3
+  rotate: false
+  xy: 801, 10
+  size: 99, 99
+  orig: 99, 99
+  offset: 0, 0
+  index: -1
+hand-L-4
+  rotate: false
+  xy: 858, 304
+  size: 60, 99
+  orig: 60, 99
+  offset: 0, 0
+  index: -1
+hand-R
+  rotate: false
+  xy: 1, 1
+  size: 141, 769
+  orig: 141, 769
+  offset: 0, 0
+  index: -1
+legs
+  rotate: false
+  xy: 392, 355
+  size: 261, 240
+  orig: 261, 240
+  offset: 0, 0
+  index: -1
+lip
+  rotate: false
+  xy: 858, 274
+  size: 42, 29
+  orig: 42, 29
+  offset: 0, 0
+  index: -1
+mouth
+  rotate: false
+  xy: 392, 307
+  size: 28, 47
+  orig: 28, 55
+  offset: 0, 8
+  index: -1
+mustache-L
+  rotate: false
+  xy: 838, 587
+  size: 89, 183
+  orig: 89, 183
+  offset: 0, 0
+  index: -1
+mustache-R
+  rotate: false
+  xy: 878, 414
+  size: 41, 172
+  orig: 41, 172
+  offset: 0, 0
+  index: -1
+nose
+  rotate: false
+  xy: 678, 53
+  size: 122, 52
+  orig: 122, 52
+  offset: 0, 0
+  index: -1
+stone
+  rotate: false
+  xy: 143, 596
+  size: 559, 174
+  orig: 559, 174
+  offset: 0, 0
+  index: -1
