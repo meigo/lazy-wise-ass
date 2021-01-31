@@ -40,6 +40,7 @@
   @media (min-aspect-ratio: 3/4) {
     canvas {
       width: auto;
+      height: 100vh;
     }
   }
 </style>

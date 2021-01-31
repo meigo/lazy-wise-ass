@@ -48,16 +48,33 @@
     right: 0;
   }
 
-  @media (min-aspect-ratio: 3/4) {
+  @media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 1/1) {
     .quote-container {
-      margin-top: -200px;
-      margin-right: -250px;
-      width: 400px;
-      height: 350px;
+      margin-top: -35vh;
+      margin-right: -35vh;
+      width: 40vh;
+      height: 45vh;
     }
     .quote-text {
-      font-size: 30px;
-      margin: 30px;
+      font-size: 3.5vh;
+      letter-spacing: 0.25vh;
+      margin: 0 4vw;
+      color: yellow;
+    }
+  }
+
+  @media (min-aspect-ratio: 1/1) {
+    .quote-container {
+      margin-top: -35vh;
+      margin-right: -30vh;
+      width: 50vh;
+      height: 40vh;
+    }
+    .quote-text {
+      font-size: 3.5vh;
+      letter-spacing: 0.25vh;
+      margin: 0 5vh;
+      color: aquamarine;
     }
   }
 </style>

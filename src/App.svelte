@@ -39,18 +39,23 @@
     margin-top: 10vh;
   }
 
-  @media (min-aspect-ratio: 3/4) {
+  @media (min-aspect-ratio: 3/4) and (max-aspect-ratio: 1/1) {
     .container {
       margin-top: -5vh;
       margin-left: 15vw;
       flex-direction: row;
       align-items: center; /* vertical center */
+      background-color: tomato;
     }
   }
 
   @media (min-aspect-ratio: 1/1) {
     .container {
+      margin-top: -5vh;
       margin-left: 0;
+      flex-direction: row;
+      align-items: center; /* vertical center */
+      background-color: wheat;
     }
   }
 </style>
