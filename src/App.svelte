@@ -1,6 +1,6 @@
 <script>
   import service from './fsm.js';
-  import Speaker from './Speaker.svelte';
+  import Speech from './Speech.svelte';
   import SpeechBubble from './SpeechBubble.svelte';
 
   const SpineComponent = import('./Spine.svelte').then(({ default: C }) => C);
@@ -45,7 +45,6 @@
       margin-left: 15vw;
       flex-direction: row;
       align-items: center; /* vertical center */
-      background-color: tomato;
     }
   }
 
@@ -55,7 +54,6 @@
       margin-left: 0;
       flex-direction: row;
       align-items: center; /* vertical center */
-      background-color: wheat;
     }
   }
 </style>
@@ -77,4 +75,4 @@
   {/await}
 </main>
 
-<Speaker {service} />
+<Speech {service} />

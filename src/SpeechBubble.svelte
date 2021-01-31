@@ -59,7 +59,6 @@
       font-size: 3.5vh;
       letter-spacing: 0.25vh;
       margin: 0 4vw;
-      color: yellow;
     }
   }
 
@@ -74,7 +73,6 @@
       font-size: 3.5vh;
       letter-spacing: 0.25vh;
       margin: 0 5vh;
-      color: aquamarine;
     }
   }
 </style>

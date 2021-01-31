@@ -4,7 +4,6 @@ export async function getRandomWikiQuote() {
   const pageId = await getRandomStart();
   const person = await getRandomPerson(pageId);
   const quote = await getPersonRandomQuote(person);
-
   return { person, quote };
 }
 

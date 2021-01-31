@@ -216,12 +216,12 @@ const headTurnAlphaStore = tweened(0, {
   duration: 300,
   easing: backOut,
 });
+
 headTurnAlphaStore.subscribe((value) => {
   if (animations.headFront.entry) animations.headFront.entry.alpha = value;
 });
 
 function addTweenedHeadTurns() {
-  //TODO: Needs cleanup on exit?
   animations.talk.entry.listener = {
     event: function (entry, event) {
       if (event.data.name === 'head-front') {
