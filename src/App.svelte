@@ -1,7 +1,5 @@
 <script>
-  // import { scale } from 'svelte/transition';
-  // import { backIn, backOut } from 'svelte/easing';
-  import service from './machines.js';
+  import service from './fsm.js';
   import Speaker from './Speaker.svelte';
   import SpeechBubble from './SpeechBubble.svelte';
 
@@ -11,10 +9,6 @@
   $: currentState = $service.machine.current;
   $: error = $service.context.error;
   $: text = $service.context.quote;
-
-  $: {
-    console.log('isBubbleVisible', $service.context.isBubbleVisible);
-  }
 </script>
 
 <style>
@@ -30,13 +24,14 @@
   .state {
     position: fixed;
     display: block;
-    margin: 20px auto;
+    margin: 10px auto;
     padding: 5px 10px;
+    font-size: 0.8rem;
     bottom: 0;
     text-align: center;
-    background-color: rgb(4, 112, 184);
+    background-color: black;
     color: white;
-    border-radius: 10px;
+    border-radius: 5px;
   }
   .container {
     display: flex;
@@ -65,9 +60,9 @@
     Loading spine component...
   {:then Spine}
     {#if !error}
-      <p class="state">{'currentState ' + currentState}</p>
+      <p class="state">{currentState}</p>
     {:else}
-      <p class="state" style="color:red;">{'error ' + error}</p>
+      <p class="state" style="background-color:red;">{'error: ' + error}</p>
     {/if}
 
     <div class="container">

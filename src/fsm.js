@@ -10,6 +10,7 @@ import {
   sleepAnimation,
   wakeAnimation,
   talkAnimation,
+  closingTalkAnimation,
   talkPauseAnimation,
 } from './spine.js';
 
@@ -81,6 +82,7 @@ const machine = createMachine({
       reduce((ctx, e) => {
         delete ctx.quote;
         delete ctx.spokenQuote;
+        delete ctx.error;
         return ctx;
       })
     )
@@ -90,7 +92,7 @@ const machine = createMachine({
     immediate(
       'loadingQuote',
       action(wakeAnimation),
-      action((ctx) => speak('oops')),
+      action((ctx) => speak('ooh')),
       logAction('loadingQuote')
     )
   ),
@@ -129,7 +131,7 @@ const machine = createMachine({
     animationTransition(
       'done',
       'closingTalk',
-      talkAnimation,
+      closingTalkAnimation,
       action((ctx) => speak(getConclusion()))
     )
   ),

@@ -61,6 +61,8 @@ async function getPersonRandomQuote(person) {
     const response = await fetch(url);
     const data = await response.json();
 
+    console.log(data);
+
     const text = data.parse.text['*'];
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, 'text/html');

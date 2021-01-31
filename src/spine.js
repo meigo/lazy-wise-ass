@@ -1,6 +1,7 @@
 import { tweened } from 'svelte/motion';
 import { backOut } from 'svelte/easing';
 import { spine } from './spine-webgl.js';
+import { playSound } from './sounds.js';
 
 let atlasFile = 'spine/wise-ass.atlas';
 let skelFile = 'spine/wise-ass.skel';
@@ -83,11 +84,19 @@ export async function setup() {
   animationStateData = new spine.AnimationStateData(skeleton.data);
   animationStateData.setMix('sleep', 'wake', 0.3);
   animationStateData.setMix('wake', 'talk', 0.3);
-  // animationStateData.setMix('sleep2', 'talk', 0.2);
-  // animationStateData.setMix('sleep', 'sleep2', 0.5);
-  animationStateData.setMix('talk', 'sleep', 1);
+  animationStateData.setMix('talk', 'talk-pause', 0.3);
+  animationStateData.setMix('talk-pause', 'closing-talk', 0.3);
+  animationStateData.setMix('closing-talk', 'sleep', 1);
 
   animationState = new spine.AnimationState(animationStateData);
+
+  animationState.addListener({
+    event: function (entry, event) {
+      if (event.data.name === 'play-sound') {
+        playSound(event.stringValue);
+      }
+    },
+  });
 
   character = { skeleton, state: animationState, bounds, premultipliedAlpha: true };
 
@@ -171,6 +180,8 @@ const animations = {
   sleep: { track: 0, name: 'sleep', loop: true, mixBlend: 'replace', entry: null },
   wake: { track: 0, name: 'wake', loop: false, mixBlend: 'replace', entry: null },
   talk: { track: 0, name: 'talk', loop: true, mixBlend: 'replace', entry: null },
+  talkPause: { track: 0, name: 'talk-pause', loop: false, mixBlend: 'replace', entry: null },
+  closingTalk: { track: 0, name: 'closing-talk', loop: false, mixBlend: 'replace', entry: null },
   eyesBlink: { track: 1, name: 'eyes-blink', loop: true, mixBlend: 'replace', entry: null },
   talkMouth: { track: 2, name: 'talk-mouth', loop: true, mixBlend: 'replace', entry: null },
   headFront: { track: 3, name: 'head-front', loop: false, mixBlend: 'replace', entry: null },
@@ -251,8 +262,11 @@ export function talkAnimation() {
 }
 
 export function talkPauseAnimation() {
-  // console.log('talkPauseAnimation');
-  animations.talk.entry.timeScale = 0;
+  setAnimation(animations.talkPause);
   animations.talkMouth.entry.timeScale = 0;
-  // animationState.addEmptyAnimation(1, 0.1, 0); // talk-mouth
+}
+
+export function closingTalkAnimation() {
+  setAnimation(animations.closingTalk);
+  animations.talkMouth.entry.timeScale = 1;
 }
