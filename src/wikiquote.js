@@ -1,4 +1,5 @@
-var api = 'https://en.wikiquote.org/w/api.php';
+// var api = 'https://en.wikiquote.org/w/api.php';
+var api = '/api';
 
 export async function getRandomWikiQuote() {
   const pageId = await getRandomPageId();
