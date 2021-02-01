@@ -23,21 +23,24 @@ let character = {};
 //----------------------------------------------------------------------------------------------------------------------
 
 export async function init(ctx) {
-  canvas = ctx.canvas;
+  try {
+    canvas = ctx.canvas;
 
-  const config = { alpha: true };
-  gl = canvas.getContext('webgl', config) || canvas.getContext('experimental-webgl', config);
-  if (!gl) {
-    alert('WebGL is unavailable.');
-    return;
+    const config = { alpha: true };
+    gl = canvas.getContext('webgl', config) || canvas.getContext('experimental-webgl', config);
+    if (!gl) {
+      return Promise.reject('WebGL is unavailable.');
+    }
+
+    // Create a simple shader, mesh, model-view-projection matrix, SkeletonRenderer, and AssetManager.
+    shader = spine.webgl.Shader.newTwoColoredTextured(gl);
+    batcher = new spine.webgl.PolygonBatcher(gl);
+    mvp.ortho2d(0, 0, canvas.width - 1, canvas.height - 1);
+    skeletonRenderer = new spine.webgl.SkeletonRenderer(gl);
+    assetManager = new spine.webgl.AssetManager(gl);
+  } catch (e) {
+    return Promise.reject(e);
   }
-
-  // Create a simple shader, mesh, model-view-projection matrix, SkeletonRenderer, and AssetManager.
-  shader = spine.webgl.Shader.newTwoColoredTextured(gl);
-  batcher = new spine.webgl.PolygonBatcher(gl);
-  mvp.ortho2d(0, 0, canvas.width - 1, canvas.height - 1);
-  skeletonRenderer = new spine.webgl.SkeletonRenderer(gl);
-  assetManager = new spine.webgl.AssetManager(gl);
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -54,8 +57,10 @@ export async function loadAssets() {
     assetManager.loadTextureAtlas(atlasFile);
   }
   while (true) {
+    if (assetManager.hasErrors()) {
+      return Promise.reject(Object.values(assetManager.getErrors()));
+    }
     if (assetManager.isLoadingComplete()) {
-      // return Promise.reject("loadAssets error");
       return;
     } else await nextFrame();
   }
@@ -80,13 +85,14 @@ export async function setup() {
 
   const bounds = calculateSetupPoseBounds(skeleton);
 
-  // Create an AnimationState, and set the initial animation in looping mode.
+  // Create an AnimationState.
   animationStateData = new spine.AnimationStateData(skeleton.data);
   animationStateData.setMix('sleep', 'wake', 0.3);
   animationStateData.setMix('wake', 'talk', 0.3);
-  animationStateData.setMix('talk', 'talk-pause', 0.3);
-  animationStateData.setMix('talk-pause', 'closing-talk', 0.3);
-  animationStateData.setMix('closing-talk', 'sleep', 1);
+  animationStateData.setMix('wake', 'resign-talk', 0.3);
+  animationStateData.setMix('talk', 'hesitate', 0.3);
+  animationStateData.setMix('hesitate', 'resign-talk', 0.3);
+  animationStateData.setMix('resign-talk', 'sleep', 1);
 
   animationState = new spine.AnimationState(animationStateData);
 
@@ -180,13 +186,13 @@ const animations = {
   sleep: { track: 0, name: 'sleep', loop: true, mixBlend: 'replace', entry: null },
   wake: { track: 0, name: 'wake', loop: false, mixBlend: 'replace', entry: null },
   talk: { track: 0, name: 'talk', loop: true, mixBlend: 'replace', entry: null },
-  talkPause: { track: 0, name: 'talk-pause', loop: false, mixBlend: 'replace', entry: null },
-  closingTalk: { track: 0, name: 'closing-talk', loop: false, mixBlend: 'replace', entry: null },
+  hesitate: { track: 0, name: 'hesitate', loop: false, mixBlend: 'replace', entry: null },
+  resignTalk: { track: 0, name: 'resign-talk', loop: false, mixBlend: 'replace', entry: null },
   eyesBlink: { track: 1, name: 'eyes-blink', loop: true, mixBlend: 'replace', entry: null },
   talkMouth: { track: 2, name: 'talk-mouth', loop: true, mixBlend: 'replace', entry: null },
   headFront: { track: 3, name: 'head-front', loop: false, mixBlend: 'replace', entry: null },
-  flyWings: { track: 10, name: 'fly-wings', loop: true, mixBlend: 'replace', entry: null },
-  fly: { track: 11, name: 'fly', loop: true, mixBlend: 'replace', entry: null },
+  fly: { track: 4, name: 'fly', loop: true, mixBlend: 'replace', entry: null },
+  flyWings: { track: 5, name: 'fly-wings', loop: true, mixBlend: 'replace', entry: null },
 };
 
 function setAnimation(animation) {
@@ -213,7 +219,7 @@ function clearAnimation(animation) {
 //----------------------------------------------------------------------------------------------------------------------
 
 const headTurnAlphaStore = tweened(0, {
-  duration: 300,
+  duration: 400,
   easing: backOut,
 });
 
@@ -222,7 +228,7 @@ headTurnAlphaStore.subscribe((value) => {
 });
 
 function addTweenedHeadTurns() {
-  animations.talk.entry.listener = {
+  animations.hesitate.entry.listener = {
     event: function (entry, event) {
       if (event.data.name === 'head-front') {
         headTurnAlphaStore.set(event.floatValue);
@@ -235,18 +241,13 @@ function addTweenedHeadTurns() {
 
 export function sleepAnimation() {
   setAnimation(animations.sleep);
-  // animationState.addAnimation(0, 'sleep2', true, 0);
-  clearAnimation(animations.eyesBlink);
   clearAnimation(animations.talkMouth);
-  // setSmoothOutAnimation(animations.headFront, 0, 0.3);
   setSmoothOutAnimation(animations.flyWings, 0, 4);
   setSmoothOutAnimation(animations.fly, 2, 4);
 }
 
 export function wakeAnimation() {
   setAnimation(animations.wake);
-  setAnimation(animations.eyesBlink);
-
   setAnimation(animations.flyWings);
   setSmoothInAnimation(animations.fly, 0, 0.5);
 }
@@ -255,18 +256,20 @@ export function talkAnimation() {
   setAnimation(animations.talk);
   setAnimation(animations.talkMouth);
   setAnimation(animations.eyesBlink);
-
-  // setAnimation(animations.headFront);
-  // animations.headFront.entry.alpha = 1;
-  // addTweenedHeadTurns();
 }
 
-export function talkPauseAnimation() {
-  setAnimation(animations.talkPause);
-  animations.talkMouth.entry.timeScale = 0;
+export function hesitateAnimation() {
+  setAnimation(animations.hesitate);
+  clearAnimation(animations.eyesBlink);
+  clearAnimation(animations.talkMouth);
+
+  setAnimation(animations.headFront);
+  animations.headFront.entry.alpha = 0;
+  addTweenedHeadTurns();
 }
 
-export function closingTalkAnimation() {
-  setAnimation(animations.closingTalk);
-  animations.talkMouth.entry.timeScale = 1;
+export function resignTalkAnimation() {
+  setAnimation(animations.resignTalk);
+  setAnimation(animations.talkMouth);
+  setSmoothOutAnimation(animations.headFront, 0, 0.3);
 }

@@ -1,7 +1,7 @@
 import { createMachine, action, guard, immediate, invoke, state, transition, reduce } from 'robot3';
 import { useMachine } from 'svelte-robot-factory';
 
-import { getQuote, speak, getConclusion } from './speech';
+import { getQuote, speak, getRandomResignText } from './speech';
 import {
   init,
   loadAssets,
@@ -10,21 +10,25 @@ import {
   sleepAnimation,
   wakeAnimation,
   talkAnimation,
-  closingTalkAnimation,
-  talkPauseAnimation,
+  resignTalkAnimation,
+  hesitateAnimation,
 } from './spine.js';
+import { playSound } from './sounds.js';
 
-//--------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------
 
 // const context = (e) => ({});
+
 // const fail = () => Promise.reject("Error");
 
+// const logAction = (msg) => action((ctx) => console.log(msg));
+
+// const logTransition = (event, state, ...args) => transition(event, state, logAction(state), ...args);
+
+// const animationTransition = (event, state, animationAction, ...args) =>
+//   transition(event, state, action(animationAction), logAction(state), ...args);
+
 const wait = (ms) => () => new Promise((resolve) => setTimeout(resolve, ms));
-
-const logAction = (msg) => action((ctx) => console.log(msg));
-
-const animationTransition = (event, state, animationAction, ...args) =>
-  transition(event, state, action(animationAction), logAction(state), ...args);
 
 const invokeState = (func, doneState, errorState = 'error', ...args) =>
   invoke(
@@ -32,40 +36,37 @@ const invokeState = (func, doneState, errorState = 'error', ...args) =>
     transition(
       'done',
       doneState,
-      reduce((ctx, e) => ({ ...ctx, ...e.data })),
-      logAction(doneState),
+      reduce((ctx, e) => ({ ...ctx, ...e.data, error: null })),
       ...args
     ),
     transition(
       'error',
       errorState,
       reduce((ctx, e) => ({ ...ctx, error: e.error })),
-      logAction('error')
+      action((ctx) => console.log(ctx.error))
     )
   );
-
-const logTransition = (event, state, ...args) => transition(event, state, logAction(state), ...args);
 
 //--------------------------------------------------------------------------------------------------------------------
 
 const machine = createMachine({
   start: state(
-    logTransition(
+    transition(
       'init',
       'initializing',
       reduce((ctx, e) => ({ ...ctx, canvas: e.canvas }))
     )
   ),
 
-  error: state(immediate('sleep')),
+  error: state(),
 
   initializing: invokeState(init, 'loadingAssets', 'error'),
 
-  loadingAssets: invokeState(loadAssets, 'assetsLoaded'),
+  loadingAssets: invokeState(loadAssets, 'assetsLoaded', 'error'),
 
-  assetsLoaded: invokeState(setup, 'settingUp'),
+  assetsLoaded: invokeState(setup, 'settingUp', 'error'),
 
-  settingUp: invokeState(start, 'ready'),
+  settingUp: invokeState(start, 'ready', 'error'),
 
   ready: state(
     immediate(
@@ -76,13 +77,12 @@ const machine = createMachine({
   ),
 
   sleeping: state(
-    logTransition(
+    transition(
       'wake',
       'waking',
       reduce((ctx, e) => {
-        delete ctx.quote;
+        delete ctx.writtenQuote;
         delete ctx.spokenQuote;
-        delete ctx.error;
         return ctx;
       })
     )
@@ -92,57 +92,60 @@ const machine = createMachine({
     immediate(
       'loadingQuote',
       action(wakeAnimation),
-      action((ctx) => speak('ooh')),
-      logAction('loadingQuote')
+      action((ctx) => speak('ooh'))
     )
   ),
 
-  loadingQuote: invokeState(getQuote, 'quoteLoaded', 'sleeping'), // If success, quote added to ctx else sleep
+  loadingQuote: invokeState(getQuote, 'quoteLoaded', 'quoteError'),
 
   quoteLoaded: state(
-    // Quote valid
+    // Quote is valid
     immediate(
       'talking',
-      guard((ctx) => ctx.quote),
+      guard((ctx) => ctx.writtenQuote),
       action(talkAnimation),
       action((ctx) => speak(ctx.spokenQuote)),
-      logAction('talking'),
-      reduce((ctx, e) => ({ ...ctx, closing: false, isBubbleVisible: true }))
+      reduce((ctx, e) => ({ ...ctx, isResigning: false, isBubbleVisible: true })),
+      action(() => playSound('pop', 150))
     ),
     // Quote not valid
+    immediate('quoteError')
+  ),
+
+  quoteError: state(
     immediate(
-      'talkingPaused',
-      reduce((ctx, e) => ({ ...ctx, closing: true }))
+      'hesitating',
+      action(hesitateAnimation),
+      reduce((ctx, e) => ({ ...ctx, isResigning: true, resignText: 'I cannot find any words' }))
     )
   ),
 
   talking: state(
-    animationTransition(
-      'pauseTalk',
-      'talkingPaused',
-      talkPauseAnimation,
-      action((ctx) => speak('hmm')),
-      reduce((ctx, e) => ({ ...ctx, closing: true }))
+    transition(
+      'hesitate',
+      'hesitating',
+      action(hesitateAnimation),
+      action(() => speak('hmm')),
+      reduce((ctx, e) => ({ ...ctx, isResigning: true, resignText: getRandomResignText() }))
     )
   ),
 
-  talkingPaused: invoke(
+  hesitating: invoke(
     wait(1000),
-    animationTransition(
+    transition(
       'done',
-      'closingTalk',
-      closingTalkAnimation,
-      action((ctx) => speak(getConclusion()))
+      'resignTalking',
+      action(resignTalkAnimation),
+      action((ctx) => speak(ctx.resignText))
     )
   ),
 
-  closingTalk: state(transition('talkDone', 'doneTalking')),
+  resignTalking: state(transition('talkDone', 'doneTalking')),
 
   doneTalking: state(
     immediate(
       'sleeping',
       action(sleepAnimation),
-      logAction('doneTalking'),
       reduce((ctx, e) => ({ ...ctx, isBubbleVisible: false }))
     )
   ),

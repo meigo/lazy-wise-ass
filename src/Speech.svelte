@@ -5,7 +5,7 @@
   export let service;
 
   const send = $service.send;
-  $: closing = $service.context.closing;
+  $: isResigning = $service.context.isResigning;
 
   onMount(() => {
     const ssu = init();
@@ -13,7 +13,7 @@
   });
 
   function onEnd(e) {
-    if (closing) send('talkDone');
-    else send('pauseTalk');
+    if (isResigning) send('talkDone');
+    else send('hesitate');
   }
 </script>

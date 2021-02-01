@@ -1,13 +1,13 @@
 var api = 'https://en.wikiquote.org/w/api.php';
 
 export async function getRandomWikiQuote() {
-  const pageId = await getRandomStart();
+  const pageId = await getRandomPageId();
   const person = await getRandomPerson(pageId);
   const quote = await getPersonRandomQuote(person);
   return { person, quote };
 }
 
-async function getRandomStart() {
+async function getRandomPageId() {
   const url = new URL(api);
   const params = {
     action: 'query',
@@ -31,7 +31,7 @@ async function getRandomStart() {
     let rand = pageIds[Math.floor(Math.random() * pageIds.length)];
     return rand;
   } catch (e) {
-    console.error(e);
+    return Promise.reject('Failed to get a random wikiquote page');
   }
 }
 
@@ -50,7 +50,7 @@ async function getRandomPerson(pageId) {
     }
     return randPerson;
   } catch (e) {
-    console.error(e);
+    return Promise.reject('Failed to get a random person from wikiquote');
   }
 }
 
@@ -59,8 +59,6 @@ async function getPersonRandomQuote(person) {
   try {
     const response = await fetch(url);
     const data = await response.json();
-
-    console.log(data);
 
     const text = data.parse.text['*'];
     const parser = new DOMParser();
@@ -74,6 +72,6 @@ async function getPersonRandomQuote(person) {
     const currentQuote = randomQuote.textContent || randomQuote.innerText;
     return currentQuote;
   } catch (e) {
-    console.error(e);
+    return Promise.reject(`Failed to get a random quote for ${person} from wikiquote`);
   }
 }

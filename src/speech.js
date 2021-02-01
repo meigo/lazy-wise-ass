@@ -37,10 +37,6 @@ const getVoices = async () => {
 //----------------------------------------------------------------------------------------------------------------------
 
 export function speak(text) {
-  // if (ss.speaking) {
-  //   console.error('already speaking');
-  //   return;
-  // }
   ss.cancel();
   ssu.voice = voices[selectedVoiceIndex];
   ssu.volume = 1;
@@ -63,15 +59,15 @@ export async function getQuote() {
     const writtenQuote = quote.replace(/^(.{100}[^\s]*).*/, '$1');
     const spokenQuote = quote.replace(/^(.{50}[^\s]*).*/, '$1');
     const ellipses = quote.length > writtenQuote.length ? '...' : '';
-    return { spokenQuote: person + '.' + spokenQuote, quote: person + ':\n' + writtenQuote + ellipses };
+    return { spokenQuote: person + '.' + spokenQuote, writtenQuote: person + ':\n' + writtenQuote + ellipses };
   }
-  return { spokenQuote: '', quote: '' };
+  return { spokenQuote: '', writtenQuote: '' };
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
-const conclusions = ['whatever', "doesn't matter", 'who cares'];
+const resignTexts = ['whatever', "doesn't matter", 'who cares'];
 
-export function getConclusion() {
-  return conclusions[Math.floor(Math.random() * conclusions.length)];
+export function getRandomResignText() {
+  return resignTexts[Math.floor(Math.random() * resignTexts.length)];
 }
