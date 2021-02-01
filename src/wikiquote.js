@@ -9,7 +9,7 @@ export async function getRandomWikiQuote() {
 }
 
 async function getRandomPageId() {
-  const url = new URL('/api', 'https://github.com/meigo/lazy-wise-ass');
+  const url = new URL('/api', 'https://lazy-wise-ass.netlify.app');
   const params = {
     action: 'query',
     format: 'json',
