@@ -16,6 +16,7 @@ async function getRandomPageId() {
     generator: 'links',
     gplnamespace: '0',
     gpllimit: '20',
+    mode: 'no-cors', // cors, no-cors, *cors, same-origin
   };
   url.search = new URLSearchParams(params).toString();
 
