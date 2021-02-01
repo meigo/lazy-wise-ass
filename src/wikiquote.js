@@ -1,5 +1,5 @@
-// var api = 'https://en.wikiquote.org/w/api.php';
-var api = 'api';
+// const api = 'https://en.wikiquote.org/w/api.php';
+// const api = '/api';
 
 export async function getRandomWikiQuote() {
   const pageId = await getRandomPageId();
@@ -9,7 +9,7 @@ export async function getRandomWikiQuote() {
 }
 
 async function getRandomPageId() {
-  const url = new URL(api);
+  const url = new URL('/api', 'https://github.com/meigo/lazy-wise-ass');
   const params = {
     action: 'query',
     format: 'json',
@@ -20,6 +20,8 @@ async function getRandomPageId() {
     // mode: 'cors', // cors, no-cors, *cors, same-origin
   };
   url.search = new URLSearchParams(params).toString();
+
+  console.log(JSON.stringify(url));
 
   try {
     const response = await fetch(url);
