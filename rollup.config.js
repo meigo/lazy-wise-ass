@@ -5,7 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 import del from 'rollup-plugin-delete';
-import copy from 'rollup-plugin-copy';
+// import copy from 'rollup-plugin-copy';
 import sveltePreprocess from 'svelte-preprocess';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -74,9 +74,9 @@ export default {
     }),
     commonjs(),
 
-    copy({
-      targets: [{ src: '_headers', dest: 'public/build' }],
-    }),
+    // copy({
+    //   targets: [{ src: '_headers', dest: 'public/build' }],
+    // }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
