@@ -1,7 +1,6 @@
 import { tweened } from 'svelte/motion';
 import { backOut } from 'svelte/easing';
 import { spine } from './spine-webgl.js';
-import { playSound } from './sounds.js';
 
 let atlasFile = 'spine/wise-ass.atlas';
 let skelFile = 'spine/wise-ass.skel';
@@ -95,14 +94,6 @@ export async function setup() {
   animationStateData.setMix('resign-talk', 'sleep', 1);
 
   animationState = new spine.AnimationState(animationStateData);
-
-  animationState.addListener({
-    event: function (entry, event) {
-      if (event.data.name === 'play-sound') {
-        playSound(event.stringValue);
-      }
-    },
-  });
 
   character = { skeleton, state: animationState, bounds, premultipliedAlpha: true };
 

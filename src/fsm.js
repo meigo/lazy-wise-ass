@@ -13,7 +13,6 @@ import {
   resignTalkAnimation,
   hesitateAnimation,
 } from './spine.js';
-import { playSound } from './sounds.js';
 
 //----------------------------------------------------------------------------------------------------------------------
 
@@ -105,8 +104,7 @@ const machine = createMachine({
       guard((ctx) => ctx.writtenQuote),
       action(talkAnimation),
       action((ctx) => speak(ctx.spokenQuote)),
-      reduce((ctx, e) => ({ ...ctx, isResigning: false, isBubbleVisible: true })),
-      action(() => playSound('pop', 150))
+      reduce((ctx, e) => ({ ...ctx, isResigning: false, isBubbleVisible: true }))
     ),
     // Quote not valid
     immediate('quoteError')
