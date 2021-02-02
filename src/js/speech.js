@@ -5,7 +5,7 @@ let ssu;
 
 let voices = [];
 
-let pitch = 0.5;
+let pitch = 0.2;
 let rate = 0.8;
 let voiceIndex = 0;
 
@@ -35,7 +35,7 @@ function findVoiceIndex(voices) {
   let index = voices.findIndex((voice) => voice.name === 'Google Deutsch'); // Chrome
   if (index > -1) return index;
 
-  index = voices.findIndex((voice) => voice.name.startsWith('Microsoft Denise Online')); // Edge
+  index = voices.findIndex((voice) => voice.name.startsWith('Microsoft George')); // Edge
   if (index > -1) return index;
 
   index = voices.findIndex((voice) => voice.name.startsWith('Microsoft Hazel')); // Opera, Firefox, Brave
