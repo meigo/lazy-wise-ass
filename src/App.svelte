@@ -39,7 +39,9 @@
   }
 </style>
 
-<svelte:window on:click={() => send('wake')} />
+<svelte:body on:click={() => send('wake')} />
+
+<Speech {service} />
 
 <div class="container">
   <SpeechBubble text={writtenQuote} visible={isBubbleVisible} />
@@ -49,5 +51,3 @@
 <StateMessage message={currentState} {error} />
 
 <GithubButton />
-
-<Speech {service} />
