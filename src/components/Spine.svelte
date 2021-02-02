@@ -22,6 +22,7 @@
     opacity: 0;
     visibility: hidden;
     transition: visibility 1s linear, opacity 1s linear;
+    pointer-events: none;
   }
 
   .visible {

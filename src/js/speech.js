@@ -9,13 +9,17 @@ let pitch = 0.2;
 let rate = 0.8;
 let voiceIndex = 0;
 
+export function isSpeechSupported() {
+  return false;
+  return typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined;
+}
+
 export function init() {
-  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = getVoices;
-  } else return;
+  if (!isSpeechSupported()) return;
 
   ss = speechSynthesis;
   ssu = new SpeechSynthesisUtterance();
+  ss.onvoiceschanged = getVoices;
 
   return ssu;
 }
@@ -47,7 +51,7 @@ function findVoiceIndex(voices) {
 //----------------------------------------------------------------------------------------------------------------------
 
 export function speak(text) {
-  if (!ss) return;
+  if (!isSpeechSupported()) return;
   ss.cancel();
   ssu.voice = voices[voiceIndex];
   ssu.volume = 1;
@@ -58,22 +62,26 @@ export function speak(text) {
 }
 
 export function hush() {
-  if (!ss) return;
+  if (!isSpeechSupported()) return;
   ss.cancel();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
 
 export async function getQuote() {
-  const { person, quote } = await getRandomWikiQuote();
+  const { person, quote, personPageUrl } = await getRandomWikiQuote();
 
   if (quote) {
     const writtenQuote = quote.replace(/^(.{100}[^\s]*).*/, '$1');
     const spokenQuote = quote.replace(/^(.{50}[^\s]*).*/, '$1');
     const ellipses = quote.length > writtenQuote.length ? '...' : '';
-    return { spokenQuote: person + '.' + spokenQuote, writtenQuote: person + ':\n' + writtenQuote + ellipses };
+    return {
+      spokenQuote: person + '.' + spokenQuote,
+      writtenQuote: person + ':\n' + writtenQuote + ellipses,
+      personPageUrl: personPageUrl,
+    };
   }
-  return { spokenQuote: '', writtenQuote: '' };
+  return { spokenQuote: '', writtenQuote: '', personPageUrl: '' };
 }
 
 //----------------------------------------------------------------------------------------------------------------------

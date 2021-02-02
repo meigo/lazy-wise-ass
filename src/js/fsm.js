@@ -1,7 +1,7 @@
 import { createMachine, action, guard, immediate, invoke, state, transition, reduce } from 'robot3';
 import { useMachine } from 'svelte-robot-factory';
 
-import { getQuote, speak, getRandomResignText } from './speech.js';
+import { getQuote, speak, getRandomResignText, isSpeechSupported } from './speech.js';
 import {
   init,
   loadAssets,
@@ -28,6 +28,7 @@ import {
 //   transition(event, state, action(animationAction), logAction(state), ...args);
 
 const wait = (ms) => () => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 const invokeState = (func, doneState, errorState = 'error', ...args) =>
   invoke(
@@ -45,6 +46,14 @@ const invokeState = (func, doneState, errorState = 'error', ...args) =>
       action((ctx) => console.log(ctx.error))
     )
   );
+
+async function speakOrWait(ctx) {
+  if (isSpeechSupported()) speak(ctx.spokenQuote);
+  else {
+    await sleep(2000);
+    console.log('>>>>>>>>>');
+  }
+}
 
 //--------------------------------------------------------------------------------------------------------------------
 
@@ -82,10 +91,13 @@ const machine = createMachine({
       reduce((ctx, e) => {
         delete ctx.writtenQuote;
         delete ctx.spokenQuote;
+        delete ctx.personPageUrl;
         return ctx;
       })
     )
   ),
+
+  speechNotSupported: state(),
 
   waking: state(
     immediate(
@@ -103,7 +115,7 @@ const machine = createMachine({
       'talking',
       guard((ctx) => ctx.writtenQuote),
       action(talkAnimation),
-      action((ctx) => speak(ctx.spokenQuote)),
+      action(speakOrWait),
       reduce((ctx, e) => ({ ...ctx, isResigning: false, isBubbleVisible: true }))
     ),
     // Quote not valid

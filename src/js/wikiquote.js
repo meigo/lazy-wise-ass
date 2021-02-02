@@ -1,11 +1,13 @@
-// const api = 'https://en.wikiquote.org/w/api.php';
-const api = 'https://lazy-wise-ass.netlify.app/api';
+const api = 'https://en.wikiquote.org/w/api.php';
+// const api = 'https://lazy-wise-ass.netlify.app/api';
+const wikiQuoteUrl = 'https://en.wikiquote.org/wiki/';
 
 export async function getRandomWikiQuote() {
   const pageId = await getRandomPageId();
   const person = await getRandomPerson(pageId);
   const quote = await getPersonRandomQuote(person);
-  return { person, quote };
+  const personPageUrl = wikiQuoteUrl + person.replace(/\s/g, '_');
+  return { person, quote, personPageUrl };
 }
 
 async function getRandomPageId() {
