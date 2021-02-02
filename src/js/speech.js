@@ -47,6 +47,7 @@ function findVoiceIndex(voices) {
 //----------------------------------------------------------------------------------------------------------------------
 
 export function speak(text) {
+  if (!ss) return;
   ss.cancel();
   ssu.voice = voices[voiceIndex];
   ssu.volume = 1;
@@ -57,6 +58,7 @@ export function speak(text) {
 }
 
 export function hush() {
+  if (!ss) return;
   ss.cancel();
 }
 
