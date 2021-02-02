@@ -4,7 +4,9 @@
 
 # LAZY WISE-ASS
 
-Description
+Web app of sluggish and burnt out wise man serving random quotes and demonstrating terrible work ethic.
+
+Created for trying out [Robot FSM](https://thisrobot.life/) and [Spine Animation](http://esotericsoftware.com/) in [Svelte](https://svelte.dev/) featuring [Wikiquote API](https://en.wikiquote.org/) and [Web Speech API](https://developer.mozilla.org/en-US/docs/Web/API/SpeechSynthesis).
 
 ## Demo
 
