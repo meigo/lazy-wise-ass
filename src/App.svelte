@@ -1,10 +1,10 @@
 <script>
-  import service from './fsm.js';
-  import Spine from './Spine.svelte';
-  import Speech from './Speech.svelte';
-  import SpeechBubble from './SpeechBubble.svelte';
-  import StateMessage from './StateMessage.svelte';
-  import GithubButton from './GithubButton.svelte';
+  import service from './js/fsm.js';
+  import Spine from './components/Spine.svelte';
+  import Speech from './components/Speech.svelte';
+  import SpeechBubble from './components/SpeechBubble.svelte';
+  import StateMessage from './components/StateMessage.svelte';
+  import GithubButton from './components/GithubButton.svelte';
 
   const send = $service.send;
   $: currentState = $service.machine.current;
@@ -45,6 +45,9 @@
   <SpeechBubble text={writtenQuote} visible={isBubbleVisible} />
   <Spine {service} />
 </div>
+
 <StateMessage message={currentState} {error} />
+
 <GithubButton />
+
 <Speech {service} />

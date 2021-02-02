@@ -1,5 +1,5 @@
-// const api = 'https://en.wikiquote.org/w/api.php';
-const api = 'https://lazy-wise-ass.netlify.app/api';
+const api = 'https://en.wikiquote.org/w/api.php';
+// const api = 'https://lazy-wise-ass.netlify.app/api';
 
 export async function getRandomWikiQuote() {
   const pageId = await getRandomPageId();
@@ -20,8 +20,6 @@ async function getRandomPageId() {
     // mode: 'cors', // cors, no-cors, *cors, same-origin
   };
   url.search = new URLSearchParams(params).toString();
-
-  console.log(JSON.stringify(url));
 
   try {
     const response = await fetch(url);

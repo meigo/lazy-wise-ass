@@ -1,6 +1,6 @@
 import { tweened } from 'svelte/motion';
 import { backOut } from 'svelte/easing';
-import { spine } from './spine-webgl.js';
+import { spine } from '../libs/spine-webgl.js';
 
 let atlasFile = 'spine/wise-ass.atlas';
 let skelFile = 'spine/wise-ass.skel';
@@ -184,10 +184,16 @@ const animations = {
   headFront: { track: 3, name: 'head-front', loop: false, mixBlend: 'replace', entry: null },
   fly: { track: 4, name: 'fly', loop: true, mixBlend: 'replace', entry: null },
   flyWings: { track: 5, name: 'fly-wings', loop: true, mixBlend: 'replace', entry: null },
+  tap: { track: 6, name: 'tap', loop: true, mixBlend: 'replace', entry: null },
 };
 
 function setAnimation(animation) {
   animation.entry = animationState.setAnimation(animation.track, animation.name, animation.loop);
+  animation.entry.mixBlend = spine.MixBlend[animation.mixBlend];
+}
+
+function addAnimation(animation, delay = 0) {
+  animation.entry = animationState.addAnimation(animation.track, animation.name, animation.loop, delay);
   animation.entry.mixBlend = spine.MixBlend[animation.mixBlend];
 }
 
@@ -205,6 +211,7 @@ function setSmoothOutAnimation(animation, delay = 0, mixDuration = 0) {
 
 function clearAnimation(animation) {
   animationState.clearTrack(animation.track);
+  skeleton.setSlotsToSetupPose();
 }
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -235,12 +242,15 @@ export function sleepAnimation() {
   clearAnimation(animations.talkMouth);
   setSmoothOutAnimation(animations.flyWings, 0, 4);
   setSmoothOutAnimation(animations.fly, 2, 4);
+  addAnimation(animations.tap, 4);
 }
 
 export function wakeAnimation() {
   setAnimation(animations.wake);
   setAnimation(animations.flyWings);
   setSmoothInAnimation(animations.fly, 0, 0.5);
+
+  clearAnimation(animations.tap);
 }
 
 export function talkAnimation() {

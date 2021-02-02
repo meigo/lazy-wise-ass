@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { init } from './speech';
+  import { init } from '../js/speech.js';
 
   export let service;
 
@@ -9,7 +9,7 @@
 
   onMount(() => {
     const ssu = init();
-    ssu.onend = onEnd;
+    if (ssu) ssu.onend = onEnd;
   });
 
   function onEnd(e) {

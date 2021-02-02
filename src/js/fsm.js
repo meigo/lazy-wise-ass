@@ -1,7 +1,7 @@
 import { createMachine, action, guard, immediate, invoke, state, transition, reduce } from 'robot3';
 import { useMachine } from 'svelte-robot-factory';
 
-import { getQuote, speak, getRandomResignText } from './speech';
+import { getQuote, speak, getRandomResignText } from './speech.js';
 import {
   init,
   loadAssets,

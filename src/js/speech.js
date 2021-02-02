@@ -1,4 +1,4 @@
-import { getRandomWikiQuote } from './wikiquote';
+import { getRandomWikiQuote } from './wikiquote.js';
 
 let ss;
 let ssu;
@@ -7,38 +7,48 @@ let voices = [];
 
 let pitch = 0.5;
 let rate = 0.8;
-let selectedVoiceIndex = 3;
+let voiceIndex = 0;
 
 export function init() {
+  if (typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined) {
+    speechSynthesis.onvoiceschanged = getVoices;
+  } else return;
+
   ss = speechSynthesis;
   ssu = new SpeechSynthesisUtterance();
-
-  if (speechSynthesis.onvoiceschanged !== undefined) {
-    speechSynthesis.onvoiceschanged = getVoices;
-  }
 
   return ssu;
 }
 
-const getVoices = async () => {
+async function getVoices() {
   return new Promise((resolve) => {
     voices = speechSynthesis.getVoices();
     if (voices.length) {
+      voiceIndex = findVoiceIndex(voices);
       resolve(voices);
       return;
     }
-    speechSynthesis.onvoiceschanged = () => {
-      voices = speechSynthesis.getVoices();
-      resolve(voices);
-    };
   });
-};
+}
+
+function findVoiceIndex(voices) {
+  let index = voices.findIndex((voice) => voice.name === 'Google Deutsch'); // Chrome
+  if (index > -1) return index;
+
+  index = voices.findIndex((voice) => voice.name.startsWith('Microsoft Denise Online')); // Edge
+  if (index > -1) return index;
+
+  index = voices.findIndex((voice) => voice.name.startsWith('Microsoft Hazel')); // Opera, Firefox, Brave
+  if (index > -1) return index;
+
+  return 0;
+}
 
 //----------------------------------------------------------------------------------------------------------------------
 
 export function speak(text) {
   ss.cancel();
-  ssu.voice = voices[selectedVoiceIndex];
+  ssu.voice = voices[voiceIndex];
   ssu.volume = 1;
   ssu.rate = rate;
   ssu.pitch = pitch;

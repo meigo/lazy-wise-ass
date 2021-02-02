@@ -1,5 +1,5 @@
 <script>
-  import LoadingIndicator from './LoadingIndicator.svelte';
+  import LoadingIndicator from './components/LoadingIndicator.svelte';
   const AppComponent = import('./App.svelte').then(({ default: C }) => C);
 </script>
 

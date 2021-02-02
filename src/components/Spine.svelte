@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { resize } from './spine.js';
+  import { resize } from '../js/spine.js';
 
   export let service;
 

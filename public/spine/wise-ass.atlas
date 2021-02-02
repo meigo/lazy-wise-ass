@@ -1,6 +1,6 @@
 
 wise-ass.png
-size: 928,772
+size: 948,772
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
@@ -13,14 +13,14 @@ arm-L-1
   index: -1
 arm-L-2
   rotate: false
-  xy: 764, 404
+  xy: 654, 404
   size: 113, 169
   orig: 113, 169
   offset: 0, 0
   index: -1
 arm-L-3
   rotate: false
-  xy: 679, 218
+  xy: 721, 222
   size: 108, 167
   orig: 108, 167
   offset: 0, 0
@@ -62,14 +62,14 @@ eyes-open
   index: -1
 face
   rotate: false
-  xy: 654, 386
+  xy: 838, 583
   size: 109, 187
   orig: 109, 187
   offset: 0, 0
   index: -1
 flies
   rotate: false
-  xy: 838, 574
+  xy: 544, 81
   size: 16, 12
   orig: 66, 55
   offset: 50, 0
@@ -90,7 +90,7 @@ hair-F-L
   index: -1
 hair-F-R
   rotate: false
-  xy: 679, 106
+  xy: 678, 49
   size: 113, 111
   orig: 113, 111
   offset: 0, 0
@@ -111,28 +111,28 @@ hand-L-2
   index: -1
 hand-L-2-2
   rotate: false
-  xy: 788, 238
+  xy: 858, 417
   size: 69, 165
   orig: 69, 165
   offset: 0, 0
   index: -1
 hand-L-2-3
   rotate: false
-  xy: 793, 110
+  xy: 830, 262
   size: 69, 127
   orig: 69, 160
   offset: 0, 0
   index: -1
 hand-L-3
   rotate: false
-  xy: 801, 10
+  xy: 830, 162
   size: 99, 99
   orig: 99, 99
   offset: 0, 0
   index: -1
 hand-L-4
   rotate: false
-  xy: 858, 304
+  xy: 792, 61
   size: 60, 99
   orig: 60, 99
   offset: 0, 0
@@ -153,7 +153,7 @@ legs
   index: -1
 lip
   rotate: false
-  xy: 858, 274
+  xy: 501, 64
   size: 42, 29
   orig: 42, 29
   offset: 0, 0
@@ -167,21 +167,21 @@ mouth
   index: -1
 mustache-L
   rotate: false
-  xy: 838, 587
+  xy: 768, 390
   size: 89, 183
   orig: 89, 183
   offset: 0, 0
   index: -1
 mustache-R
   rotate: false
-  xy: 878, 414
+  xy: 679, 231
   size: 41, 172
   orig: 41, 172
   offset: 0, 0
   index: -1
 nose
   rotate: false
-  xy: 678, 53
+  xy: 792, 8
   size: 122, 52
   orig: 122, 52
   offset: 0, 0
@@ -191,5 +191,12 @@ stone
   xy: 143, 596
   size: 559, 174
   orig: 559, 174
+  offset: 0, 0
+  index: -1
+tap
+  rotate: false
+  xy: 679, 161
+  size: 115, 60
+  orig: 115, 60
   offset: 0, 0
   index: -1
