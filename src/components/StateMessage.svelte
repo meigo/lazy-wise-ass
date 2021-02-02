@@ -17,7 +17,7 @@
     font-size: 0.8rem;
     bottom: 0;
     text-align: center;
-    background-color: black;
+    background-color: #ddd;
     color: white;
     border-radius: 5px;
   }
