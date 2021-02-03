@@ -239,6 +239,7 @@ function addTweenedHeadTurns() {
 
 export function sleepForeverAnimation() {
   setAnimation(animations.sleep);
+  clearAnimation(animations.tap);
 }
 
 export function sleepAnimation() {
@@ -253,7 +254,6 @@ export function wakeAnimation() {
   setAnimation(animations.wake);
   setAnimation(animations.flyWings);
   setSmoothInAnimation(animations.fly, 0, 0.5);
-
   clearAnimation(animations.tap);
 }
 

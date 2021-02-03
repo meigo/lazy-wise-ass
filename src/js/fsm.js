@@ -70,30 +70,31 @@ const machine = createMachine({
 
   ready: state(
     immediate(
-      'validatingSpeechSupport',
+      'sleeping',
+      action(sleepAnimation),
       reduce((ctx, e) => ({ ...ctx, canvasVisible: true }))
-    )
-  ),
-
-  validatingSpeechSupport: state(
-    immediate('sleeping', guard(isSpeechSupported), action(sleepAnimation)),
-    immediate(
-      'error',
-      action(sleepForeverAnimation),
-      reduce((ctx, e) => ({ ...ctx, error: 'Speech synthesis not supported, sleeping forever!' }))
     )
   ),
 
   sleeping: state(
     transition(
       'wake',
-      'waking',
+      'validatingSpeechSupport',
       reduce((ctx, e) => {
         delete ctx.writtenQuote;
         delete ctx.spokenQuote;
         delete ctx.personPageUrl;
         return ctx;
       })
+    )
+  ),
+
+  validatingSpeechSupport: state(
+    immediate('waking', guard(isSpeechSupported)),
+    immediate(
+      'error',
+      action(sleepForeverAnimation),
+      reduce((ctx, e) => ({ ...ctx, error: 'Speech synthesis not supported, sleeping forever!' }))
     )
   ),
 

@@ -12,12 +12,26 @@
     text-align: center;
     margin: 10px;
     width: 32px;
+    opacity: 1;
     outline: none;
     cursor: pointer;
   }
 
   .github-button:hover {
     transform: scale(1.1);
+    animation: blink 0.5s ease-in infinite;
+  }
+
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      opacity: 1;
+    }
   }
 </style>
 

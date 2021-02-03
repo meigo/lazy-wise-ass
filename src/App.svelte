@@ -1,7 +1,7 @@
 <script>
+  import { isSpeechInitialized, init as initSpeech } from './js/speech.js';
   import service from './js/fsm.js';
   import Spine from './components/Spine.svelte';
-  import Speech from './components/Speech.svelte';
   import SpeechBubble from './components/SpeechBubble.svelte';
   import StateMessage from './components/StateMessage.svelte';
   import GithubButton from './components/GithubButton.svelte';
@@ -12,6 +12,19 @@
   $: writtenQuote = $service.context.writtenQuote;
   $: personPageUrl = $service.context.personPageUrl;
   $: isBubbleVisible = $service.context.isBubbleVisible;
+  $: isResigning = $service.context.isResigning;
+
+  function onSpeechEnd(e) {
+    if (isResigning) send('talkDone');
+    else send('hesitate');
+  }
+
+  function onBodyClick(e) {
+    if (!isSpeechInitialized) {
+      initSpeech(onSpeechEnd);
+    }
+    send('wake');
+  }
 </script>
 
 <style>
@@ -40,9 +53,7 @@
   }
 </style>
 
-<svelte:body on:click={() => send('wake')} />
-
-<Speech {service} />
+<svelte:body on:click={onBodyClick} />
 
 <div class="container">
   <SpeechBubble text={writtenQuote} visible={isBubbleVisible} url={personPageUrl} />

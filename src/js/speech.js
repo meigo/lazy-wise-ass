@@ -9,18 +9,23 @@ let pitch = 0.2;
 let rate = 0.8;
 let voiceIndex = 0;
 
+export let _isSpeechSupported;
+export let isSpeechInitialized;
+
 export function isSpeechSupported() {
-  return typeof speechSynthesis !== 'undefined' && speechSynthesis.onvoiceschanged !== undefined;
+  return _isSpeechSupported;
 }
 
-export function init(onEnd) {
-  if (!isSpeechSupported()) return;
+export function init(speechEndHandler) {
+  _isSpeechSupported = typeof speechSynthesis !== 'undefined';
+  isSpeechInitialized = true;
+  if (!_isSpeechSupported) return;
 
   ss = speechSynthesis;
-  ss.onvoiceschanged = getVoices;
+  if ('onvoiceschanged' in speechSynthesis) ss.onvoiceschanged = getVoices;
 
   ssu = new SpeechSynthesisUtterance();
-  ssu.onend = onEnd;
+  ssu.onend = speechEndHandler;
 }
 
 async function getVoices() {
@@ -50,7 +55,8 @@ function findVoiceIndex(voices) {
 //----------------------------------------------------------------------------------------------------------------------
 
 export function speak(text) {
-  if (!ss) return;
+  if (!_isSpeechSupported) return;
+
   ss.cancel();
   ssu.voice = voices[voiceIndex];
   ssu.volume = 1;
@@ -61,7 +67,8 @@ export function speak(text) {
 }
 
 export function hush() {
-  if (!ss) return;
+  if (!_isSpeechSupported) return;
+
   ss.cancel();
 }
 
