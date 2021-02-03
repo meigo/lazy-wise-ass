@@ -17,6 +17,7 @@
   function onSpeechEnd(e) {
     if (isResigning) send('talkDone');
     else send('hesitate');
+    // TODO: Fix for firefox firing onend event on start
   }
 
   function onBodyClick(e) {

@@ -2,6 +2,8 @@
   import LoadingIndicator from './components/LoadingIndicator.svelte';
 
   const AppComponent = import('./App.svelte').then(({ default: C }) => C);
+
+  let innerHeight;
 </script>
 
 <style>
@@ -11,12 +13,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100vw;
-    height: 100vh;
   }
 </style>
 
-<main>
+<svelte:window bind:innerHeight />
+
+<main style="height:{innerHeight}px">
   {#await AppComponent}
     <LoadingIndicator />
   {:then App}
