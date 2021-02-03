@@ -10,6 +10,7 @@
   $: currentState = $service.machine.current;
   $: error = $service.context.error;
   $: writtenQuote = $service.context.writtenQuote;
+  $: personPageUrl = $service.context.personPageUrl;
   $: isBubbleVisible = $service.context.isBubbleVisible;
 </script>
 
@@ -44,7 +45,7 @@
 <Speech {service} />
 
 <div class="container">
-  <SpeechBubble text={writtenQuote} visible={isBubbleVisible} />
+  <SpeechBubble text={writtenQuote} visible={isBubbleVisible} url={personPageUrl} />
   <Spine {service} />
 </div>
 

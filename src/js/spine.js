@@ -237,6 +237,10 @@ function addTweenedHeadTurns() {
 
 //----------------------------------------------------------------------------------------------------------------------
 
+export function sleepForeverAnimation() {
+  setAnimation(animations.sleep);
+}
+
 export function sleepAnimation() {
   setAnimation(animations.sleep);
   clearAnimation(animations.talkMouth);

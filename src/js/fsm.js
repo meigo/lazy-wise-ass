@@ -1,12 +1,13 @@
 import { createMachine, action, guard, immediate, invoke, state, transition, reduce } from 'robot3';
 import { useMachine } from 'svelte-robot-factory';
 
-import { getQuote, speak, getRandomResignText } from './speech.js';
+import { isSpeechSupported, getQuote, speak, getRandomResignText } from './speech.js';
 import {
   init,
   loadAssets,
   setup,
   start,
+  sleepForeverAnimation,
   sleepAnimation,
   wakeAnimation,
   talkAnimation,
@@ -69,9 +70,17 @@ const machine = createMachine({
 
   ready: state(
     immediate(
-      'sleeping',
-      reduce((ctx, e) => ({ ...ctx, canvasVisible: true })),
-      action(sleepAnimation)
+      'validatingSpeechSupport',
+      reduce((ctx, e) => ({ ...ctx, canvasVisible: true }))
+    )
+  ),
+
+  validatingSpeechSupport: state(
+    immediate('sleeping', guard(isSpeechSupported), action(sleepAnimation)),
+    immediate(
+      'error',
+      action(sleepForeverAnimation),
+      reduce((ctx, e) => ({ ...ctx, error: 'Speech synthesis not supported, sleeping forever!' }))
     )
   ),
 
@@ -82,6 +91,7 @@ const machine = createMachine({
       reduce((ctx, e) => {
         delete ctx.writtenQuote;
         delete ctx.spokenQuote;
+        delete ctx.personPageUrl;
         return ctx;
       })
     )

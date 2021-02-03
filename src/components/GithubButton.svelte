@@ -13,6 +13,7 @@
     margin: 10px;
     width: 32px;
     outline: none;
+    cursor: pointer;
   }
 
   .github-button:hover {

@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { init } from '../js/speech.js';
+  import { isSpeechSupported, init } from '../js/speech.js';
 
   export let service;
 
@@ -8,8 +8,7 @@
   $: isResigning = $service.context.isResigning;
 
   onMount(() => {
-    const ssu = init();
-    if (ssu) ssu.onend = onEnd;
+    if (isSpeechSupported()) init(onEnd);
   });
 
   function onEnd(e) {

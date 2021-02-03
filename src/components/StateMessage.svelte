@@ -20,6 +20,7 @@
     background-color: black;
     color: white;
     border-radius: 5px;
+    pointer-events: none;
   }
   .error {
     background-color: tomato;
