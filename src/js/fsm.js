@@ -50,9 +50,9 @@ const invokeState = (func, doneState, errorState = 'error', ...args) =>
 //--------------------------------------------------------------------------------------------------------------------
 
 const machine = createMachine({
-  start: state(
+  enter: state(
     transition(
-      'init',
+      'start',
       'initializing',
       reduce((ctx, e) => ({ ...ctx, canvas: e.canvas }))
     )

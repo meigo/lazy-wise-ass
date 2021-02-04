@@ -1,17 +1,14 @@
 <script>
-  import { onMount } from 'svelte';
   import { resize } from '../js/spine.js';
 
   export let service;
 
-  let canvas;
-
   const send = $service.send;
   $: canvasVisible = $service.context.canvasVisible;
 
-  onMount(() => {
-    send({ type: 'init', canvas: canvas }); // Start the state machine
-  });
+  function startFSM(node) {
+    send({ type: 'start', canvas: node }); // Start the state machine
+  }
 </script>
 
 <style>
@@ -40,4 +37,4 @@
 
 <svelte:window on:resize={resize} />
 
-<canvas bind:this={canvas} width="900" height="900" class:visible={canvasVisible} />
+<canvas use:startFSM width="900" height="900" class:visible={canvasVisible} />

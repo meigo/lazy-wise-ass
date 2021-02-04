@@ -1,5 +1,4 @@
-// const api = 'https://en.wikiquote.org/w/api.php';
-const api = 'https://lazy-wise-ass.netlify.app/api';
+const api = IS_PRODUCTION ? 'https://lazy-wise-ass.netlify.app/api' : 'https://en.wikiquote.org/w/api.php';
 const wikiQuoteUrl = 'https://en.wikiquote.org/wiki/';
 
 export async function getRandomWikiQuote() {

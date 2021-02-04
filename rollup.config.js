@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 import del from 'rollup-plugin-delete';
+import replace from '@rollup/plugin-replace';
 import sveltePreprocess from 'svelte-preprocess';
 
 const production = !process.env.ROLLUP_WATCH;
@@ -46,6 +47,9 @@ export default {
   },
   plugins: [
     del({ targets: ['public/build/*.js', 'public/build/*.map'] }),
+    replace({
+      IS_PRODUCTION: production,
+    }),
     svelte({
       compilerOptions: {
         // enable run-time checks when not in production
